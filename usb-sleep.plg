@@ -1,0 +1,76 @@
+<?xml version='1.0' standalone='yes'?>
+<!DOCTYPE PLUGIN [
+  <!ENTITY name      "usb-sleep">
+  <!ENTITY author    "andrebrait">
+  <!ENTITY version   "2026.10.27">
+  <!ENTITY pluginURL "https://raw.githubusercontent.com/andrebrait/unraid-usb-sleep/main/usb-sleep.plg">
+  <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
+  <!ENTITY sbin      "/usr/local/sbin">
+]>
+
+<PLUGIN
+  name="&name;"
+  author="&author;"
+  version="&version;"
+  pluginURL="&pluginURL;"
+  min="6.9.0"
+  icon="moon-o"
+  support="https://github.com/andrebrait/unraid-usb-sleep/issues"
+>
+
+<CHANGES>
+### 2026.10.27
+- Initial release.
+</CHANGES>
+
+<!-- sdspin wrapper. Kept inline so the plugin is one file with nothing to download. -->
+<FILE Name="&plugdir;/sdspin" Mode="0755">
+<INLINE>
+<![CDATA[
+#!/bin/bash
+# usb-sleep: wrapper around Unraid's sdspin for USB-SATA bridges.
+# Many bridges (e.g. WD Elements 1058:25a3) answer ATA pass-through with sense
+# 00/1d "ATA pass-through information available". hdparm prints
+# "bad/missing sense data", sdspin treats that as failure, and emhttpd then
+# stops spinning the drive down. When sdspin.orig fails, ask smartctl for the
+# real power state instead.
+# Exit codes match sdspin: 0 up/success, 1 error, 2 spun down (status).
+
+ORIG=${USB_SLEEP_ORIG:-/usr/local/sbin/sdspin.orig}
+SMARTCTL=${USB_SLEEP_SMARTCTL:-/usr/sbin/smartctl}
+DEV=/dev/${1#'/dev/'}
+
+"$ORIG" "$@"
+RET=$?
+[[ $RET == 1 ]] || exit $RET
+
+POWER=$("$SMARTCTL" -n standby -i "$DEV" 2>&1)
+case "$2" in
+  down) [[ $POWER =~ "STANDBY mode" ]] && exit 0 ;;
+  up)   [[ $POWER =~ "Power mode "(is|was): ]] && exit 0 ;;
+  *)    [[ $POWER =~ "Power mode "(is|was): ]] && exit 0
+        [[ $POWER =~ "STANDBY mode" ]] && exit 2 ;;
+esac
+exit 1
+]]>
+</INLINE>
+</FILE>
+
+<FILE Run="/bin/bash">
+<INLINE>
+# Keep Unraid's sdspin as sdspin.orig; never wrap our own wrapper.
+grep -q "usb-sleep" &sbin;/sdspin || mv &sbin;/sdspin &sbin;/sdspin.orig
+install -m 0755 &plugdir;/sdspin &sbin;/sdspin
+echo "usb-sleep &version; installed. Drives that already failed a spin-down need a reboot or re-plug."
+</INLINE>
+</FILE>
+
+<FILE Run="/bin/bash" Method="remove">
+<INLINE>
+[ -f &sbin;/sdspin.orig ] &amp;&amp; mv -f &sbin;/sdspin.orig &sbin;/sdspin
+rm -rf &plugdir; /boot/config/plugins/&name;
+echo "usb-sleep removed, Unraid's sdspin restored."
+</INLINE>
+</FILE>
+
+</PLUGIN>
