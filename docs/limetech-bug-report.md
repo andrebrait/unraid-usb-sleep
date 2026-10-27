@@ -10,7 +10,11 @@ unnecessary.
 2. Title: the line under [Title](#title).
 3. Body: everything under [Body](#body).
 4. Custom field "Unraid version": `7.3.3`.
-5. Attach the diagnostics zip: **Tools → Diagnostics → Download** (anonymized by default).
+5. Attach both files (on Google Drive under `Unraid/sdspin USB spin-down bug report`):
+   - `nas-diagnostics-20261027-1033.zip`: anonymized diagnostics. They were taken with this plugin
+     installed, so their syslog shows the workaround (a clean spin-down), not the failure.
+   - `nas-syslog-sdspin-excerpt.txt`: the syslog lines from before the plugin, with
+     `sdspin /dev/sda down: 1` on every attempt, and the clean spin-down after it.
 
 The report was written on Unraid 7.3.3 (kernel 6.18.54-Unraid), with this plugin installed. With the
 plugin, Unraid's original script is `/usr/local/sbin/sdspin.orig`. Before filing on a newer release,
