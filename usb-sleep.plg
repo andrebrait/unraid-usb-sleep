@@ -2,7 +2,7 @@
 <!DOCTYPE PLUGIN [
   <!ENTITY name      "usb-sleep">
   <!ENTITY author    "andrebrait">
-  <!ENTITY version   "2026.10.27">
+  <!ENTITY version   "2026.11.11">
   <!ENTITY pluginURL "https://raw.githubusercontent.com/andrebrait/unraid-usb-sleep/main/usb-sleep.plg">
   <!ENTITY plugdir   "/usr/local/emhttp/plugins/&name;">
   <!ENTITY sbin      "/usr/local/sbin">
@@ -19,9 +19,30 @@
 >
 
 <CHANGES>
+### 2026.11.11
+- The Plugins page now shows the plugin's name and a description instead of only "usb-sleep".
+
 ### 2026.10.27
 - Initial release.
+- Lets drives behind USB-SATA bridges (for example the WD Elements Desktop, USB ID 1058:25a3) spin down. These bridges answer hdparm with sense data 00/1d, so Unraid's sdspin reported "sdspin /dev/sdX down: 1" and emhttpd stopped spinning the drive down and kept polling it.
+- Installs a wrapper in place of /usr/local/sbin/sdspin (Unraid's script is kept as sdspin.orig). When sdspin.orig reports an error, the wrapper reads the real power state with smartctl -n standby, which does not wake the drive. Drives that already work are not affected.
+- Drives that already failed a spin-down need a reboot or a re-plug. Removing the plugin restores Unraid's sdspin.
 </CHANGES>
+
+<!-- The plugin manager does not overwrite existing files, so remove the description before writing the current one. -->
+<FILE Run="/bin/bash">
+<INLINE>
+rm -f &plugdir;/README.md
+</INLINE>
+</FILE>
+
+<FILE Name="&plugdir;/README.md">
+<INLINE>
+**USB Sleep**
+
+Lets drives behind USB-SATA bridges spin down. Some bridges answer Unraid's spin-down commands in a way Unraid reads as a failure, so it stops spinning those drives down; this plugin reads their real power state instead.
+</INLINE>
+</FILE>
 
 <!-- sdspin wrapper. Kept inline so the plugin is one file with nothing to download. -->
 <FILE Name="&plugdir;/sdspin" Mode="0755">
