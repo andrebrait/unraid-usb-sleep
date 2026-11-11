@@ -1,4 +1,17 @@
-# unraid-usb-sleep
+<div align="center">
+
+<img src="docs/assets/logo.svg" alt="USB Sleep logo" width="150">
+
+<h1>USB Sleep</h1>
+
+<p><strong>Let drives behind USB-SATA bridges spin down on <a href="https://unraid.net/">Unraid</a>.</strong></p>
+
+<p>
+  <img src="https://img.shields.io/badge/Unraid-6.9%2B-e8543f" alt="Supported Unraid versions">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/andrebrait/unraid-usb-sleep?color=green" alt="License: MIT"></a>
+</p>
+
+</div>
 
 An Unraid plugin that lets drives behind USB-SATA bridges spin down.
 

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -25 128 128" role="img" aria-labelledby="t">
+  <title id="t">USB Sleep logo</title>
+  <rect x="14" y="52" width="14" height="8" fill="#9fb3c8"/>
+  <line x1="28" y1="56" x2="58" y2="56" stroke="#52606d" stroke-width="6"/>
+  <rect x="58" y="38" width="36" height="36" rx="5" fill="#3e4c59"/>
+  <rect x="94" y="44" width="20" height="24" rx="2" fill="#9fb3c8"/>
+  <rect x="100" y="50" width="5" height="5" fill="#1f2933"/>
+  <rect x="100" y="58" width="5" height="5" fill="#1f2933"/>
+  <polyline points="82,14 100,14 82,32 100,32" fill="none" stroke="#e8543f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <polyline points="104,4 114,4 104,14 114,14" fill="none" stroke="#e8543f" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
