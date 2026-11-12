@@ -7,6 +7,7 @@
 <p><strong>Let drives behind USB-SATA bridges spin down on <a href="https://unraid.net/">Unraid</a>.</strong></p>
 
 <p>
+  <a href="https://github.com/andrebrait/unraid-usb-sleep/releases"><img src="https://img.shields.io/github/v/release/andrebrait/unraid-usb-sleep?label=release&color=blue" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/Unraid-6.9%2B-e8543f" alt="Supported Unraid versions">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/andrebrait/unraid-usb-sleep?color=green" alt="License: MIT"></a>
 </p>
